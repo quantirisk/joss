@@ -24,7 +24,7 @@ This project is licensed under the [MIT License](LICENSE.md).
 
 
 # Methods
-Use the [`serialize`](#serializedata-options) and [`deserialize`](#deserializebytes-options) methods for serializations in the form of static data.
+Use the [`serialize`](#serializedata-options) and [`deserialize`](#deserializebytes) methods for serializations in the form of static data.
 Use the [`serializable`](#serializabledata-options) and [`deserializable`](#deserializableoptions) methods for serializations in the form of readable streams.
 Use the [`deserializing`](#deserializingreadable-options) method for an alternative way to deserialize readable streams.
 
@@ -172,7 +172,7 @@ Outgoing data is serialized using the [`serializable`](#serializabledata-options
 ## XMLHttpRequest
 The following is an example of an AJAX request.
 Outgoing data is serialized using [`JOSS.serialize`](#serializedata-options), which is analogous to `JSON.stringify`.
-Incoming data is deserialized using [`JOSS.deserialize`](#deserializebytes-options), which is analogous to `JSON.parse`.
+Incoming data is deserialized using [`JOSS.deserialize`](#deserializebytes), which is analogous to `JSON.parse`.
 ```javascript
   const data = { foo : { bar: "baz" } };
   const request = new XMLHttpRequest();
