@@ -4,10 +4,12 @@ Serialize JavaScript data in an open binary format to seamlessly exchange struct
 Compatible with browsers, Deno, and Node.js.
 * Serializes almost every intrinsic JavaScript data type and data structure, including those not native to JSON, such as ArrayBuffer, BigInt, Date, Map, RegExp, Set, and TypedArray.
 * Serializes primitive wrapper objects, sparse arrays, signed zeros, and circular dependencies.
-* Supports methods for static and streaming data.
+* Supports serializing to readable streams.
+
+<p align="center"><a href="https://www.buymeacoffee.com/wynntee"><img src="buymeacoffee.png" alt="Buy me a coffee"></a></p>
 
 If you find this project useful, I would appreciate your support by way of [sponsorship](https://www.buymeacoffee.com/wynntee).
-You may also [contact me](#contact) for paid customization work or technical support.
+You may also [contact me](#contact) for customization work, technical support, and any enquiries about the serialization scheme.
 
 
 # Downloads
@@ -23,7 +25,7 @@ This project is licensed under the [MIT License](LICENSE.md).
 
 # Methods
 Use the [`serialize`](#serializedata-options) and [`deserialize`](#deserializebytes-options) methods for serializations in the form of static data.
-Use the [`serializable`](#serializabledata-options) and [`deserializable`](#deserializableoptions) methods for serializations in the form of readable and writable streams.
+Use the [`serializable`](#serializabledata-options) and [`deserializable`](#deserializableoptions) methods for serializations in the form of readable streams.
 Use the [`deserializing`](#deserializingreadable-options) method for an alternative way to deserialize readable streams.
 
 ## serialize(data, [options])
@@ -206,4 +208,4 @@ If you find this project useful, I would appreciate your support by way of:
 -->
 
 # Contact
-Wynn Tee &lt;wynn@wynntee.com&gt;
+Wynn Tee &lt;w.tee@wynntee.com&gt;
