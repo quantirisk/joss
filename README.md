@@ -16,9 +16,9 @@ You may also [contact me](#contact) for customization work, technical support, a
 
 | Type | Environment | Filename |
 | :--- | :--- | :--- |
-| ES module | Browsers, Deno | [joss.min.js](joss.min.js) |
-| CommonJS module | Node.js | [joss.node.min.js](joss.node.min.js) |
-| Immediately Invoked Function Expression | Less recent browsers | [joss.iife.min.js](joss.iife.min.js) |
+| ES module | Browsers, Deno | [joss.min.js](https://github.com/wynntee/joss/raw/main/joss.min.js) |
+| CommonJS module | Node.js | [joss.node.min.js](https://github.com/wynntee/joss/raw/main/joss.node.min.js) |
+| Immediately Invoked Function Expression | Less recent browsers | [joss.iife.min.js](https://github.com/wynntee/joss/raw/main/joss.iife.min.js) |
 
 This project is licensed under the [MIT License](LICENSE.md).
 
