@@ -72,20 +72,12 @@ Use the [`deserializing`](#deserializingreadable-options) method for an alternat
   A promise that resolves to the deserialized data.
 
 
-<!--
-# Exceptions
-* If the serialized byte stream is too long, an `Error` whose `name` property is `'413'` will be emitted.
-* If the serialized byte stream is not fully consumed, either because there were excess bytes or the serialization is incomplete, an `Error` whose `name` property is `'400'` will be emitted.
-* If the serialized byte stream contains malformed bytes, an `Error` whose `name` property is `'400'` will be emitted.
--->
-
 # Examples
 
 ## Deep Clone
 The following is an example of deep cloning in a browser that supports ES modules.
 The example is intended to illustrate the syntax of the serialization and deserialization methods.
-
-```
+```javascript
   import * as JOSS from "/path/to/joss.min.js";          // Import the module.
   const data = { foo : { bar: "baz" } };                 // Define the data to be serialized.
 
@@ -106,8 +98,7 @@ The example is intended to illustrate the syntax of the serialization and deseri
 
 ## Fetch API
 The following is an example of a HTTP request made using the `Fetch API`. The serialization and deserialization methods are determined by feature detection.
-
-```
+```javascript
   import * as JOSS from "/path/to/joss.min.js";
   const data = { foo : { bar: "baz" } };
   const options = { method: "POST", headers: { "Content-Type": "application/octet-stream" } };
@@ -139,8 +130,7 @@ Please see [this page](https://web.dev/fetch-upload-streaming/#feature-detection
 The following is an example of a HTTP server in Deno.
 Incoming data is deserialized using the [`deserializing`](#deserializingreadable-options) method.
 Outgoing data is serialized using the [`serializable`](#serializabledata-options) method.
-
-```
+```javascript
   import { serializable, deserializing } from "/path/to/joss.min.js";
   import { listenAndServe } from "https://deno.land/std/http/mod.ts";
   import { readerFromStreamReader } from "https://deno.land/std/io/mod.ts";
@@ -160,7 +150,7 @@ The following is an example of a HTTP server in Node.js.
 Incoming data is deserialized using the [`deserializable`](#deserializableoptions) method.
 Outgoing data is serialized using the [`serializable`](#serializabledata-options) method.
 
-```
+```javascript
   const { serializable, deserializable } = require("/path/to/joss.node.min.js");
   const { createServer } = require("http");
   createServer((request, response) => {
@@ -181,7 +171,7 @@ Outgoing data is serialized using the [`serializable`](#serializabledata-options
 The following is an example of an AJAX request.
 Outgoing data is serialized using [`JOSS.serialize`](#serializedata-options), which is analogous to `JSON.stringify`.
 Incoming data is deserialized using [`JOSS.deserialize`](#deserializebytes-options), which is analogous to `JSON.parse`.
-```
+```javascript
   const data = { foo : { bar: "baz" } };
   const request = new XMLHttpRequest();
   request.open("POST", "/path/to/resource", true);
@@ -196,7 +186,7 @@ Incoming data is deserialized using [`JOSS.deserialize`](#deserializebytes-optio
 ```
 
 The `JOSS` variable is included in the global namespace using an immediately invoked function expression (IIFE).
-```
+```html
   <script defer nomodule src="/path/to/joss.iife.js"></script>
 ```
 
