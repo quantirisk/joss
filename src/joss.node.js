@@ -20,7 +20,6 @@
 // SOFTWARE.
 // 
   "use strict";
-  const version = 1;
   const stream = require("stream");
   const endian = getEndianness();
   const encoders = {
@@ -87,13 +86,8 @@
     output.length = 0;
     output.record = new Map();
     output.method = "static";
-    encodeVersion(output);
     encodeData(output, input);
     return concatBytes(output.bytes, output.length);
-  }
-  function encodeVersion(output) {
-    output.version = version;
-    appendBytes(output, Uint8Array.of(version));
   }
   function encodeData(output, input) {
     switch (typeof input) {
@@ -394,7 +388,6 @@
         const collect = collects[n];
         const iterator = iterators[n];
         const iteration = iterator.next();
-        if (output.version === undefined) encodeVersion(output);
         if (stage === 0) {
           let byte;
           byte = 4 << 5;
@@ -572,17 +565,9 @@
     input.cursor = 0;
     input.offset = 0;
     input.method = "static";
-    decodeVersion(input);
     const output = decodeData(input);
     if (input.cursor !== input.bytes.length) throw errors.unused;
     return output;
-  }
-  function decodeVersion(input) {
-    input.version = input.bytes[input.cursor];
-    if (input.version === undefined) throw errors.ended;
-    if (input.version > version) console.warn("Trying to deserialize a newer version of the serialization scheme.");
-    input.cursor++;
-    input.offset++;
   }
   function decodeData(input) {
     const byte = input.bytes[input.cursor];
@@ -1021,7 +1006,6 @@
         input.bytes = concatBytes([input.bytes, chunk]);
         const l = input.bytes.length;
         let n = parents.length-1;
-        if (input.version === undefined) decodeVersion(input);
         while (n >= 0) {
           const parent = parents[n];
           const child = getValue(parent);
