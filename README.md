@@ -3,7 +3,7 @@
 Serialize JavaScript data in an open binary format to seamlessly exchange structured data between JavaScript runtime environments.
 Compatible with browsers, Deno, and Node.js.
 * Serializes almost every intrinsic JavaScript data type and data structure, including those not native to JSON, such as ArrayBuffer, BigInt, Date, Map, RegExp, Set, and TypedArray.
-* Serializes primitive wrapper objects, sparse arrays, signed zeros, and circular dependencies.
+* Serializes primitive wrapper objects, sparse arrays, signed zeros, and circular references.
 * Supports serializing to readable streams.
 
 <p align="center"><a href="https://www.buymeacoffee.com/wynntee"><img src="buymeacoffee.png" alt="Buy me a coffee"></a></p>
@@ -193,19 +193,7 @@ The `JOSS` variable is included in the global namespace using an immediately inv
 ```
 
 # Specification
-To be added.
-
-<!--
-# Support
-If you find this project useful, I would appreciate your support by way of:
-* **Job offers.**
-  I can customize the module to serialize objects created using your own constructor function or class declaration.
-  I can also help with any problems getting started.
-  Please [contact me](#contact) to begin a conversation.
-* **Sponsorship.**
-  I reside in a country that isn't covered by the GitHub Sponsors program.
-  Please [visit this page](https://www.buymeacoffee.com/wynntee) to sponsor me.
--->
+The [specification](https://www.wynntee.com/projects/serialization/specification/index.html) of JS Open Serialization Scheme.
 
 # Contact
 Wynn Tee &lt;w.tee@wynntee.com&gt;

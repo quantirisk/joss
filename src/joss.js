@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Tee Teik Wynn
+// Copyright (c) 2021 Tee Teik Wynn (w.tee@wynntee.com)
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -730,6 +730,7 @@
         input.cursor += m+1;
         input.offset += m+1;
         for (let i = 0; i < n; i+=1) {
+          if (isHoleByte(input)) throw errors.malformed;
           output.push(decodeData(input));
         }
         return output;
@@ -740,7 +741,10 @@
         input.offset += m+1;
         for (let i = 0; i < n; i+=1) {
           if (isStringByte(input) === false) throw errors.malformed;
-          output[decodeData(input)] = decodeData(input);
+          const key = decodeData(input);
+          if (output.hasOwnProperty(key)) throw errors.malformed;
+          if (isHoleByte(input)) throw errors.malformed;
+          output[key] = decodeData(input);
         }
         return output;
       case 2:
@@ -749,7 +753,10 @@
         input.cursor += m+1;
         input.offset += m+1;
         for (let i = 0; i < n; i+=1) {
-          output.set(decodeData(input), decodeData(input));
+          const key = decodeData(input);
+          if (output.has(key)) throw errors.malformed;
+          if (isHoleByte(input)) throw errors.malformed;
+          output.set(key, decodeData(input));
         }
         return output;
       case 3:
@@ -758,7 +765,10 @@
         input.cursor += m+1;
         input.offset += m+1;
         for (let i = 0; i < n; i+=1) {
-          output.add(decodeData(input));
+          if (isHoleByte(input)) throw errors.malformed;
+          const key = decodeData(input);
+          if (output.has(key)) throw errors.malformed;
+          output.add(key);
         }
         return output;
     }
@@ -787,7 +797,11 @@
     } else {
       for (let i = 0; i < n2; i+=1) {
         if (isNaturalByte(input) === false) throw errors.malformed;
-        output[decodeData(input)] = decodeData(input);
+        const index = decodeData(input);
+        if (index >= n1) throw errors.malformed;
+        if (output.hasOwnProperty(index)) throw errors.malformed;
+        if (isHoleByte(input)) throw errors.malformed;
+        output[index] = decodeData(input);
       }
       return output;
     }
@@ -1081,7 +1095,10 @@
                 setValue(parent, output);
                 if (n === 0) break;
                 parents.pop();
-                if (parents[n-1][$key] === $keymap) parents[n-1][$key] = output;
+                if (parents[n-1][$key] === $keymap) {
+                  if (parents[n-1].has(child)) throw errors.malformed;
+                  parents[n-1][$key] = output;
+                }
               } else if (parent[$sparse] === "A") {
                 parent[$i]++;
                 parents.pop();
@@ -1141,7 +1158,10 @@
               } else {
                 try {
                   if (isNaturalByte(input) === false) throw errors.malformed;
-                  child[$key] = decodeData(input);
+                  const index = decodeData(input);
+                  if (index >= child.length) throw errors.malformed;
+                  if (child.hasOwnProperty(index)) throw errors.malformed;
+                  child[$key] = index;
                   parents.push(child);
                 } catch(e) {
                   if (e !== errors.ended) error = e;
@@ -1151,7 +1171,9 @@
             } else if (name === "Object") {
               try {
                 if (isStringByte(input) === false) throw errors.malformed;
-                child[$key] = decodeData(input);
+                const key = decodeData(input);
+                if (child.hasOwnProperty(key)) throw errors.malformed;
+                child[$key] = key;
                 parents.push(child);
               } catch(e) {
                 if (e !== errors.ended) error = e;
@@ -1176,7 +1198,10 @@
             delete child[$n];
             if (n === 0) break;
             parents.pop();
-            if (parents[n-1][$key] === $keymap) parents[n-1][$key] = child;
+            if (parents[n-1][$key] === $keymap) {
+              if (parents[n-1].has(child)) throw errors.malformed;
+              parents[n-1][$key] = child;
+            }
           }
           n = parents.length-1;
         }
@@ -1212,6 +1237,7 @@
         parent.set(parent[$key], value);
         parent[$i]++;
       } else if (name === "Set") {
+        if (parent.has(value)) throw errors.malformed;
         parent.add(value);
         parent[$key] = value;
         parent[$i]++;
@@ -1326,6 +1352,11 @@
     const byte = input.bytes[input.cursor];
     if (byte === undefined) throw errors.ended;
     return byte >> 5 === 1 && (byte >> 4 & 1) === 0 && (byte >> 3 & 1) === 0;
+  }
+  function isHoleByte(input) {
+    const byte = input.bytes[input.cursor];
+    if (byte === undefined) throw errors.ended;
+    return byte === 12;
   }
   function isStringByte(input) {
     const byte = input.bytes[input.cursor];
