@@ -192,8 +192,28 @@ The `JOSS` variable is included in the global namespace using an immediately inv
   <script defer nomodule src="/path/to/joss.iife.js"></script>
 ```
 
-# Specification
-The [specification](https://www.wynntee.com/projects/serialization/specification/index.html) of JS Open Serialization Scheme.
+# Supported Types
+The serialization format supports the following data types and data structures:
+* `null`
+* `undefined`
+* `Boolean` (including primitive wrapper object)
+* `BigInt` (including primitive wrapper object)
+* `Number` (including primitive wrapper object, `Infinity`, `-Infinity`, `NaN`, and `-0`)
+* `String` (including primitive wrapper object)
+* `ArrayBuffer`
+* `SharedArrayBuffer`
+* `TypedArray` (including `BigInt64Array` and `BigUint46Array`)
+* `DataView`
+* `Array` (dense and sparse)
+* `Object`
+* `Map`
+* `Set`
+* `Date`
+* `RegExp`
+* Object references
+* Custom objects
+
+Please see the [specification](https://www.wynntee.com/projects/serialization/specification/index.html) for details.
 
 # Contact
 Wynn Tee &lt;w.tee@wynntee.com&gt;
