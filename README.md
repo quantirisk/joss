@@ -6,9 +6,7 @@ Compatible with browsers, Deno, and Node.js.
 * Serializes primitive wrapper objects, sparse arrays, signed zeros, and circular references.
 * Supports serializing to readable streams.
 
-<p align="center"><a href="https://www.buymeacoffee.com/wynntee"><img src="buymeacoffee.png" alt="Buy me a coffee"></a></p>
-
-If you find this project useful, I would appreciate your support by way of [sponsorship](https://www.buymeacoffee.com/wynntee).
+If you find this project useful, I would appreciate your support by way of [sponsorship](https://opencollective/joss).
 You may also [contact me](#contact) for customization work, technical support, and any enquiries about the serialization scheme.
 
 
