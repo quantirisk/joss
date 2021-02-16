@@ -430,9 +430,11 @@ const JOSS = (function() {
       iterators.push(iterate(collects[0]));
     }
     function encodeChunk(controller) {
-      const n = collects.length-1;
-      if (n >= 0) {
-        output.bytes = [];
+      let m = 0;
+      let n = collects.length-1;
+      output.bytes = [];
+      while (m < 16384 && n >= 0) {
+        const l = output.length;
         const stage = stages[n];
         const collect = collects[n];
         const iterator = iterators[n];
@@ -523,11 +525,13 @@ const JOSS = (function() {
           collects.pop();
           iterators.pop();
         }
-        if (output.bytes.length !== 0) {
-          controller.enqueue(concatBytes(output.bytes));
-        } else {
-          this.pull(controller);
-        }
+        m += output.length-l;
+        n = collects.length-1;
+      }
+      if (output.bytes.length !== 0) {
+        controller.enqueue(concatBytes(output.bytes));
+      } else if (n >= 0) {
+        this.pull(controller);
       } else {
         controller.close();
       }
