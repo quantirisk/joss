@@ -75,23 +75,28 @@ Use the [`deserializing`](#deserializingreadable-options) method for an alternat
 # Examples
 
 ## Deep Clone
-The following is an example of deep cloning in a browser that supports ES modules.
+The following is an example of deep cloning in Node.js.
 The example is intended to illustrate the syntax of the serialization and deserialization methods.
 ```javascript
-  import * as JOSS from "/path/to/joss.min.js";          // Import the module.
+  const JOSS = require("/path/to/joss.node.min.js");     // Import the module.
   const data = { foo : { bar: "baz" } };                 // Define the data to be serialized.
 
-  const clone = JOSS.deserialize(JOSS.serialize(data));  // Clone using serialize and deserialize.
+  const bytes = JOSS.serialize(data);                    // Clone using serialize and
+  const copy = JOSS.deserialize(bytes);                  // deserialize.
+  console.log(data, copy);
 
   const readable = JOSS.serializable(data);              // Clone using serializable and
   const writable = JOSS.deserializable();                // deserializable by piping the
-  readable.pipeTo(writable).then(() => {                 // streams. However, this is not
-    const clone = writable.result;                       // supported in Firefox and Safari.
+  readable.pipe(writable).on("finish", () => {           // streams. However, this is not
+    const copy = writable.result;                        // supported in Firefox and Safari.
+    console.log(data, copy);
   });
 
   const readable2 = JOSS.serializable(data);             // Clone using serializable and
-  JOSS.deserializing(readable2).then((result) => {       // deserializing. This has
-    const clone = result;                                // better browser support.
+  const promise = JOSS.deserializing(readable2);         // deserializing. This has
+  promise.then((result) => {                             // better browser support.                    
+    const copy = result;
+    console.log(data, copy);
   });
 ```
 
