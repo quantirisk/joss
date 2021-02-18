@@ -94,7 +94,7 @@ The example is intended to illustrate the syntax of the serialization and deseri
 
   const readable2 = JOSS.serializable(data);             // Clone using serializable and
   const promise = JOSS.deserializing(readable2);         // deserializing. This has
-  promise.then((result) => {                             // better browser support.                    
+  promise.then((result) => {                             // better browser support.
     const copy = result;
     console.log(data, copy);
   });
