@@ -139,8 +139,9 @@ Outgoing data is serialized using the [`serializable`](#serializabledata-options
   import { serializable, deserializing } from "/path/to/joss.min.js";
   import { listenAndServe } from "https://deno.land/std/http/mod.ts";
   import { readerFromStreamReader } from "https://deno.land/std/io/mod.ts";
+  import { iter } from "https://deno.land/std/io/util.ts";
   listenAndServe({hostname: "127.0.0.1", port: 8080}, async (request) => {
-    const stream = Deno.iter(request.body);                       // Deno.Reader to AsyncIterable
+    const stream = iter(request.body);                            // Deno.Reader to AsyncIterable
     const data = await deserializing(stream);                     // Call deserializing
     // ...
     const readable = serializable(data);                          // Call serializable
