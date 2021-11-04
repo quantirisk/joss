@@ -6,9 +6,6 @@ Compatible with browsers, Deno, and Node.js.
 * Serializes primitive wrapper objects, sparse arrays, signed zeros, and circular references.
 * Supports serializing to readable streams.
 
-You may also [contact me](#contact) for customization work, technical support, and any enquiries about the serialization scheme.
-
-
 # Downloads
 
 | Type | Environment | Filename |
@@ -216,7 +213,4 @@ The serialization format supports the following data types and data structures:
 * Object references
 * Custom objects
 
-Please see the [specification](https://www.wynntee.com/projects/serialization/specification/index.html) for details.
-
-# Contact
-Wynn Tee &lt;w.tee@wynntee.com&gt;
+Please see the [official specification](SPECS.md) for details.
