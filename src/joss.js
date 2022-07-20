@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Quantitative Risk Solutions PLT (201604001668)
+// Copyright (c) 2022 Quantitative Risk Solutions PLT (201604001668)
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,6 +22,7 @@
   "use strict";
   const endian = getEndianness();
   const encoders = {
+    "MyClass": encodeCustom,
     "Object": encodeCollect,
     "Array": encodeCollect,
     "Map": encodeCollect,
@@ -67,6 +68,23 @@
     decodeStream as deserializable,
     decodeAsync as deserializing
   };
+  class MyClass {
+    constructor(height, width) {
+      this.height = height;
+      this.width = width;
+    }
+  }
+  function encodeCustom(output, input) {
+    appendBytes(output, Uint8Array.of(30));
+    encodeData(output, input.height);
+    encodeData(output, input.width);
+  }
+  function decodeCustom(input) {
+    input.cursor += 1;
+    const height = decodeData(input);
+    const width = decodeData(input);
+    return new MyClass(height, width);
+  }
   function encodeStatic(input, options) {
     const output = {};
     if (options === undefined) {
@@ -634,6 +652,7 @@
         case 14: return decodeDate(input);
         case 15: return decodeRegExp(input);
         case 29: return decodeReference(input);
+        case 30: return decodeCustom(input);
         default: throw errors.malformed;
       }
     } else {
