@@ -149,7 +149,7 @@ The serialization format supports the following data types and data structures:
 * `String` (including primitive wrapper object)
 * `ArrayBuffer`
 * `SharedArrayBuffer`
-* `TypedArray` (including `BigInt64Array` and `BigUint46Array`)
+* `TypedArray` (including `Float16Array`)
 * `DataView`
 * `Array` (dense and sparse)
 * `Object`

@@ -640,7 +640,11 @@
         <td><code>BigUint64Array</code></td>
       </tr>
       <tr>
-        <td>12–15</td>
+        <td>12</td>
+        <td><code>Float16Array</code></td>
+      </tr>
+      <tr>
+        <td>13–15</td>
         <td>Reserved for future extensions</td>
       </tr>
     </tbody>
@@ -733,5 +737,5 @@
 
 <section id="section-copyright">
   <h2>6. Copyright</h2>
-  <p>Copyright &copy; 2021 Quantitative Risk Solutions PLT (201604001668). All rights reserved.</p>
+  <p>Copyright &copy; Quantitative Risk Solutions PLT (201604001668). All rights reserved.</p>
 </section>

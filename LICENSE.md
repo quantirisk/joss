@@ -1,4 +1,4 @@
-Copyright (c) 2021 Quantitative Risk Solutions PLT (201604001668)
+Copyright (c) Quantitative Risk Solutions PLT (201604001668)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
