@@ -591,7 +591,7 @@
         <td>Elements are in big-endian byte ordering</td>
       </tr>
       <tr>
-        <td rowspan="13">4–7</td>
+        <td rowspan="14">4–7</td>
         <td>0</td>
         <td><code>DataView</code></td>
       </tr>
