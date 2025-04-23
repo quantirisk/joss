@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Quantitative Risk Solutions PLT (201604001668)
+// Copyright (c) Quantitative Risk Solutions PLT (201604001668)
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -34,6 +34,7 @@
     "Uint16Array": encodeTypedArray,
     "Int32Array": encodeTypedArray,
     "Uint32Array": encodeTypedArray,
+    "Float16Array": encodeTypedArray,
     "Float32Array": encodeTypedArray,
     "Float64Array": encodeTypedArray,
     "BigInt64Array": encodeTypedArray,
@@ -301,7 +302,8 @@
     const names = ["DataView",
       "Int8Array", "Uint8Array", "Uint8ClampedArray",
       "Int16Array", "Uint16Array", "Int32Array", "Uint32Array",
-      "Float32Array", "Float64Array", "BigInt64Array", "BigUint64Array"];
+      "Float32Array", "Float64Array", "BigInt64Array", "BigUint64Array",
+      "Float16Array"];
     appendBytes(output, Uint8Array.of(byte | names.indexOf(name)));
     if (output.record.has(buffer) === false) {
       output.record.set(buffer, output.length);
@@ -834,6 +836,7 @@
         case 9:  output = swap ? new Float64Array(swap64(buffer.slice())) : new Float64Array(buffer); break;
         case 10: output = swap ? new BigInt64Array(swap64(buffer.slice())) : new BigInt64Array(buffer); break;
         case 11: output = swap ? new BigUint64Array(swap64(buffer.slice())) : new BigUint64Array(buffer); break;
+        case 12: output = swap ? new Float16Array(swap16(buffer.slice())) : new Float16Array(buffer); break;
         default: throw errors.malformed;
       }
       input.map.set(offset, output);
