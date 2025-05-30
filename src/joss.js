@@ -39,6 +39,14 @@
     "Float64Array": encodeTypedArray,
     "BigInt64Array": encodeTypedArray,
     "BigUint64Array": encodeTypedArray,
+    "Duration": encodeTemporal,
+    "PlainYearMonth": encodeTemporal,
+    "PlainMonthDay": encodeTemporal,
+    "PlainDate": encodeTemporal,
+    "PlainTime": encodeTemporal,
+    "PlainDateTime": encodeTemporal,
+    "Instant": encodeTemporal,
+    "ZonedDateTime": encodeTemporal,
     "Date": encodeDate,
     "RegExp": encodeRegExp,
     "ArrayBuffer": encodeString,
@@ -95,7 +103,7 @@
         if (input !== null) {
           const name = input.constructor.name;
           const encoder = encoders[name];
-          if (encoder !== undefined) {
+          if (encoder !== undefined && (encoder !== encodeTemporal || input instanceof Temporal[name])) {
             if (output.record.has(input) === false) {
               output.record.set(input, output.length);
               return encoder(output, input, name);
@@ -311,6 +319,15 @@
     } else {
       encodeReference(output, buffer);
     }
+  }
+  function encodeTemporal(output, input, name) {
+    let byte;
+    byte = 7 << 5;
+    const names = ["Duration",
+      "PlainYearMonth", "PlainMonthDay", "PlainDate", "PlainTime",
+      "PlainDateTime", "Instant", "ZonedDateTime"];
+    appendBytes(output, Uint8Array.of(byte | names.indexOf(name)));
+    encodeData(output, input.toString());
   }
   function encodeDate(output, input) {
     appendBytes(output, Uint8Array.of(14));
@@ -646,7 +663,7 @@
         case 4: return decodeCollect(input);
         case 5: return decodeSparseArray(input);
         case 6: return decodeTypedArray(input);
-        case 7: throw errors.malformed;
+        case 7: return decodeTemporal(input);
       }
     }
   }
@@ -837,6 +854,39 @@
         case 10: output = swap ? new BigInt64Array(swap64(buffer.slice())) : new BigInt64Array(buffer); break;
         case 11: output = swap ? new BigUint64Array(swap64(buffer.slice())) : new BigUint64Array(buffer); break;
         case 12: output = swap ? new Float16Array(swap16(buffer.slice())) : new Float16Array(buffer); break;
+        default: throw errors.malformed;
+      }
+      input.map.set(offset, output);
+      return output;
+    } catch(error) {
+      if (error === errors.ended) {
+        input.cursor--;
+        input.offset--;
+        throw error;
+      } else {
+        throw error;
+      }
+    }
+  }
+  function decodeTemporal(input) {
+    const offset = input.offset;
+    const byte = input.bytes[input.cursor];
+    const type = byte & 7;
+    input.cursor++;
+    input.offset++;
+    try {
+      let output;
+      if (isStringByte(input) === false) throw errors.malformed;
+      const string = decodeData(input);
+      switch (type) {
+        case 0: output = Temporal.Duration.from(string); break;
+        case 1: output = Temporal.PlainYearMonth.from(string); break;
+        case 2: output = Temporal.PlainMonthDay.from(string); break;
+        case 3: output = Temporal.PlainDate.from(string); break;
+        case 4: output = Temporal.PlainTime.from(string); break;
+        case 5: output = Temporal.PlainDateTime.from(string); break;
+        case 6: output = Temporal.Instant.from(string); break;
+        case 7: output = Temporal.ZonedDateTime.from(string); break;
         default: throw errors.malformed;
       }
       input.map.set(offset, output);
