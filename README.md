@@ -2,12 +2,12 @@
 
 Serialize JavaScript data in an open binary format to seamlessly exchange structured data between JavaScript runtime environments.
 Compatible with browsers, Deno, and Node.
-* Serializes almost every intrinsic JavaScript data type and data structure, including those not native to JSON, such as ArrayBuffer, BigInt, Date, Map, RegExp, Set, and TypedArray.
+* Serializes almost every intrinsic JavaScript data type and data structure, including those not native to JSON, such as ArrayBuffer, BigInt, Date, Map, RegExp, Set, Temporal, and TypedArray.
 * Serializes primitive wrapper objects, sparse arrays, signed zeros, and circular references.
 * Supports serializing to readable streams.
 
-> **Note**\
-> In view of IE11 reaching its end of life, Node supporting the Web Streams API, and Deno leveraging the Request and Response objects in its HTTP Server API, we will release only an ES module in future versions of JOSS. The CommonJS module and IIFE version can always be found in release 1.0.3.
+> **Note about Temporal**\
+> Support for Temporal was included in release 1.1.1, but support in JavaScript runtime environments is patchy. As at May 2025, Firefox is the only browser to support Temporal by default. To try it in Node, be sure to include the `--harmony-temporal` flag. To try it in Deno, include the `--unstable-temporal` flag.
 
 # Downloads
 
@@ -15,10 +15,9 @@ Compatible with browsers, Deno, and Node.
 | :--- | :--- | :--- |
 | ES module | Browsers, Deno, Node | [joss.min.js](https://github.com/quantirisk/joss/raw/main/joss.min.js) |
 | ES module (mjs extension) | Node | [joss.min.mjs](https://github.com/quantirisk/joss/raw/main/joss.min.mjs) |
-| CommonJS module | Node | [joss.node.min.js](https://github.com/quantirisk/joss/raw/1.0.3/joss.node.min.js) |
-| Immediately Invoked Function Expression | Old browsers | [joss.iife.min.js](https://github.com/quantirisk/joss/raw/1.0.3/joss.iife.min.js) |
 
 This project is licensed under the [MIT License](LICENSE.md).
+The CommonJS and IIFE versions are no longer maintained, but can always be found in [release 1.0.3](https://github.com/quantirisk/joss/releases/tag/1.0.3).
 
 
 # Methods
@@ -106,34 +105,33 @@ It can be enabled by navigating to `chrome://flags` and activating the `enable-e
 Please see [this page](https://web.dev/fetch-upload-streaming/#feature-detection) for more information about request streams.
 
 ## Deno HTTP Server
-The following is an example of a HTTP server in Deno (tested in v1.23.2).
+The following is an example of a HTTP server in Deno (tested in v2.3.3).
 Incoming data is deserialized using the [`deserializing`](#deserializingreadable-options) method.
 Outgoing data is serialized using the [`serializable`](#serializabledata-options) method.
 ```javascript
   import { serializable, deserializing } from "/path/to/joss.min.js";
-  import { serve } from "https://deno.land/std@0.146.0/http/server.ts";
-  serve(async function(request) {
+  Deno.serve({ hostname: "127.0.0.1", port: 8080 }, async (request) => {
     let data = await deserializing(request.body);  // Call deserializing
     // ...
     return new Response(serializable(data));       // Call serializable
-  }, { hostname: "127.0.0.1", port: 8080 });
+  });
 ```
 
 
 ## Node HTTP Server
-The following is an example of a HTTP server in Node (tested in v18.4.0).
+The following is an example of a HTTP server in Node (tested in v22.16.0).
 Incoming data is deserialized using the [`deserializing`](#deserializingreadable-options) method.
 Outgoing data is serialized using the [`serializable`](#serializabledata-options) method.
 ```javascript
-  import { serializable, deserializing } from "/path/to/joss.min.mjs";
+  import { serializable, deserializing } from "/path/to/joss.min.js";
   import { createServer } from "node:http";
-  createServer(async function(request, response) {
+  import { Writable } from "node:stream";
+  createServer(async (request, response) => {
     let data = await deserializing(request);       // Call deserializing
     // ...
     const readable = serializable(data);           // Call serializable
-    for await (const chunk of readable) {
-      response.write(chunk);
-    }
+    const writable = Writable.toWeb(response);     // Convert response from a stream.Writable
+    await readable.pipeTo(writable);               // to a WritableStream for pipeTo() to work
     response.end();
   }).listen(8080, "127.0.0.1");
 ```
@@ -150,6 +148,7 @@ The serialization format supports the following data types and data structures:
 * `ArrayBuffer`
 * `SharedArrayBuffer`
 * `TypedArray` (including `Float16Array`)
+* `Temporal`
 * `DataView`
 * `Array` (dense and sparse)
 * `Object`

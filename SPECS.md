@@ -1,4 +1,4 @@
-<header>
+﻿<header>
   <h1>JS Open Serialization Scheme</h1>
 </header>
 
@@ -15,11 +15,12 @@
         <li><a href="#section-serialization-dense">2.5. Dense Arrays and Collections</a></li>
         <li><a href="#section-serialization-sparse">2.6. Sparse Arrays</a></li>
         <li><a href="#section-serialization-typed">2.7. Typed Arrays</a></li>
-        <li><a href="#section-serialization-date">2.8. Dates</a></li>
-        <li><a href="#section-serialization-regexp">2.9. Regular Expressions</a></li>
-        <li><a href="#section-serialization-reference">2.10. Object References</a></li>
-        <li><a href="#section-serialization-custom">2.11. Custom Objects</a></li>
-        <li><a href="#section-serialization-unsupported">2.12. Unsupported Data</a></li>
+        <li><a href="#section-serialization-temporal">2.8. Temporal</a></li>
+        <li><a href="#section-serialization-date">2.9. Dates</a></li>
+        <li><a href="#section-serialization-regexp">2.10. Regular Expressions</a></li>
+        <li><a href="#section-serialization-reference">2.11. Object References</a></li>
+        <li><a href="#section-serialization-custom">2.12. Custom Objects</a></li>
+        <li><a href="#section-serialization-unsupported">2.13. Unsupported Data</a></li>
       </ul>
     </li>
     <li><a href="#section-deserialization">3. Deserialization</a></li>
@@ -652,8 +653,78 @@
   <p>The payload is the serialization of the binary string returned by the <code>buffer</code> property and segmented by the <code>byteOffset</code> and <code>byteLength</code> properties.</p>
 </section>
 
+<section id="section-serialization-temporal">
+  <h3>2.8. Temporal</h3>
+  <p>The <code>Temporal</code> object is used to represent dates and times. It is designed to replace the <code>Date</code> object. It is serialized by concatenating</p>
+  <ol>
+    <li>The marker byte.</li>
+    <li>The payload.</li>
+  </ol>
+  <p>The marker byte is defined in the following table. The most significant bit is assigned the bit number 0.</p>
+  <table id="marker-temporal">
+    <caption>Table 8. Marker byte for Temporal classes.</caption>
+    <thead>
+      <tr>
+        <th>Bit</th>
+        <th>Value</th>
+        <th>Interpretation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>0–2</td>
+        <td>7</td>
+        <td><code>Temporal</code></td>
+      </tr>
+      <tr>
+        <td rowspan="2">3–4</td>
+        <td>0</td>
+        <td><code>Temporal</code></td>
+      </tr>
+      <tr>
+        <td>1–3</td>
+        <td>Reserved for future extensions</td>
+      </tr>
+      <tr>
+        <td rowspan="8">5–7</td>
+        <td>0</td>
+        <td><code>Temporal.Duration</code></td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td><code>Temporal.PlainYearMonth</code></td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><code>Temporal.PlainMonthDay</code></td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><code>Temporal.PlainDate</code></td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><code>Temporal.PlainTime</code></td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><code>Temporal.PlainDateTime</code></td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td><code>Temporal.Instant</code></td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td><code>Temporal.ZonedDateTime</code></td>
+      </tr>
+    </tbody>
+  </table>
+  <p>The payload is the serialization of the string returned by the <code>toString()</code> method.</p>
+</section>
+
 <section id="section-serialization-date">
-  <h3>2.8. Dates</h3>
+  <h3>2.9. Dates</h3>
   <p>The <code>Date</code> object is used to represent dates and times. It is serialized by concatenating</p>
   <ol>
     <li>The <a href="#marker-date">marker byte</a> for <code>Date</code>.</li>
@@ -662,7 +733,7 @@
 </section>
 
 <section id="section-serialization-regexp">
-  <h3>2.9. Regular Expressions</h3>
+  <h3>2.10. Regular Expressions</h3>
   <p>The <code>RegExp</code> object is used to represent regular expressions. It is serialized by concatenating</p>
   <ol>
     <li>The <a href="#marker-regexp">marker byte</a> for <code>RegExp</code>.</li>
@@ -671,7 +742,7 @@
 </section>
 
 <section id="section-serialization-reference">
-  <h3>2.10. Object References</h3>
+  <h3>2.11. Object References</h3>
   <p>A reference to an object whose marker byte can be found in the serialized byte stream is serialized by concatenating</p>
   <ol>
     <li>The <a href="#marker-reference">marker byte</a> for object reference.</li>
@@ -680,7 +751,7 @@
 </section>
 
 <section id="section-serialization-custom">
-  <h3>2.11. Custom Objects</h3>
+  <h3>2.12. Custom Objects</h3>
   <p>A custom object that can be serialized using an external serialization format is serialized by concatenating</p>
   <ol>
     <li>The <a href="#marker-custom">marker byte</a> for custom object.</li>
@@ -689,7 +760,7 @@
 </section>
 
 <section id="section-serialization-unsupported">
-  <h3>2.12. Unsupported Data</h3>
+  <h3>2.13. Unsupported Data</h3>
   <p>Any data type or data structure not covered by the preceding subsections is serialized using a <a href="#marker-unsupported">standalone marker byte</a>.</p>
 </section>
 
