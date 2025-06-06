@@ -611,6 +611,8 @@
   function decodeStatic(bytes) {
     if (typeof bytes !== "object" || bytes.constructor.name !== "Uint8Array") {
       throw new TypeError("The bytes parameter must be a Uint8Array.");
+    } else if (bytes.length === 0) {
+      return new RangeError("The bytes parameter is an empty Uint8Array.");
     }
     const input = {};
     input.map = new Map();
