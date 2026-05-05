@@ -7,7 +7,7 @@ Compatible with browsers, Deno, and Node.
 * Supports serializing to readable streams.
 
 > **Note about Temporal**\
-> Support for Temporal was included in release 1.1.1, but support in JavaScript runtime environments is patchy. As at May 2025, Firefox is the only browser to support Temporal by default. To try it in Node, be sure to include the `--harmony-temporal` flag. To try it in Deno, include the `--unstable-temporal` flag.
+> > Support for Temporal was included in release 1.1.1. As at May 2026, the latest versions of Chrome, Edge, Firefox, and Node (v26) support Temporal by default. To try it in earlier versions of Node, be sure to include the `--harmony-temporal` flag.
 
 # Downloads
 
